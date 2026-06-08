@@ -14,6 +14,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.api.distmarker.Dist;
@@ -42,8 +43,14 @@ public class TestableMod {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
     // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+    // Create a Deferred Register to hold BlockEntities
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
     // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+
+    public static final DeferredBlock<ContinuityTerminalBlock> CONTINUITY_TERMINAL_BLOCK = BLOCKS.register("continuity_terminal", () -> new ContinuityTerminalBlock(BlockBehaviour.Properties.of().mapColor(MapColor.METAL)));
+    public static final DeferredItem<BlockItem> CONTINUITY_TERMINAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("continuity_terminal", CONTINUITY_TERMINAL_BLOCK);
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ContinuityTerminalBlockEntity>> CONTINUITY_TERMINAL_BLOCK_ENTITY = BLOCK_ENTITIES.register("continuity_terminal", () -> BlockEntityType.Builder.of(ContinuityTerminalBlockEntity::new, CONTINUITY_TERMINAL_BLOCK.get()).build(null));
 
     // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
     public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block", BlockBehaviour.Properties.of().mapColor(MapColor.STONE));
@@ -73,6 +80,8 @@ public class TestableMod {
         BLOCKS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
         ITEMS.register(modEventBus);
+        // Register the Deferred Register to the mod event bus so block entities get registered
+        BLOCK_ENTITIES.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
 
@@ -86,6 +95,8 @@ public class TestableMod {
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, VaultClientConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, VaultCommonConfig.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -105,6 +116,7 @@ public class TestableMod {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(EXAMPLE_BLOCK_ITEM);
+            event.accept(CONTINUITY_TERMINAL_BLOCK_ITEM);
         }
     }
 
