@@ -96,9 +96,9 @@ public class TestableMod {
             LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
         }
 
-        LOGGER.info("{}{}", Config.MAGIC_NUMBER_INTRODUCTION.get(), Config.MAGIC_NUMBER.getAsInt());
+        LOGGER.info("{}{}", Config.MAGIC_NUMBER_INTRODUCTION.get().replaceAll("[\r\n]", ""), Config.MAGIC_NUMBER.getAsInt());
 
-        Config.ITEM_STRINGS.get().forEach((item) -> LOGGER.info("ITEM >> {}", item));
+        Config.ITEM_STRINGS.get().forEach((item) -> LOGGER.info("ITEM >> {}", item.replaceAll("[\r\n]", "")));
     }
 
     // Add the example block item to the building blocks tab
