@@ -26,6 +26,5 @@ public class TestableModClient {
     static void onClientSetup(FMLClientSetupEvent event) {
         // Some client setup code
         TestableMod.LOGGER.info("HELLO FROM CLIENT SETUP");
-        TestableMod.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
     }
 }
