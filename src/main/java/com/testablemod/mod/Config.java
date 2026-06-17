@@ -37,6 +37,10 @@ public class Config {
     static final ModConfigSpec SPEC = BUILDER.build();
 
     private static boolean validateItemName(final Object obj) {
-        return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
+        if (!(obj instanceof String itemName)) {
+            return false;
+        }
+        ResourceLocation location = ResourceLocation.tryParse(itemName);
+        return location != null && BuiltInRegistries.ITEM.containsKey(location);
     }
 }
